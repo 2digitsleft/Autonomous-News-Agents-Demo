@@ -14,6 +14,8 @@ briefing from any topic you provide.
 | Orchestration | The Editor plans the task, delegates, and assembles the final output |
 | Autonomous multi-step planning | The system runs from topic → published article without human steps |
 
+<img src="demo-screen.png" alt="Alt text" width="800">
+
 ## The three agents
 
 1. **Editor** (Orchestrator) — receives the topic, writes a headline and research brief,
