@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The AI News Desk — Autonomous Agent Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="masthead">
+    <div class="masthead-top">
+      <span class="masthead-date" id="live-date"></span>
+      <div class="masthead-logo">
+        <span class="logo-rule"></span>
+        <h1>The AI News Desk</h1>
+        <span class="logo-rule"></span>
+      </div>
+      <span class="masthead-edition">Autonomous Agent Demo</span>
+    </div>
+    <div class="masthead-rule-thick"></div>
+    <p class="masthead-sub">Three specialized AI agents collaborate autonomously to produce a live news briefing. Watch them plan, research, and write in real time.</p>
+  </header>
+
+  <main class="layout">
+
+    <!-- Left column: controls -->
+    <aside class="sidebar">
+
+      <section class="config-block">
+        <label class="field-label" for="api-key">OpenRouter API Key</label>
+        <div class="key-row">
+          <input type="password" id="api-key" placeholder="sk-or-..." autocomplete="off" />
+          <button class="icon-btn" id="toggle-key" onclick="toggleKey()" title="Show/hide key">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <p class="field-hint">Get a free key at <a href="https://openrouter.ai" target="_blank">openrouter.ai</a></p>
+      </section>
+
+      <div class="rule"></div>
+
+      <section class="config-block">
+        <label class="field-label">Topic</label>
+        <input type="text" id="topic-input" placeholder="e.g. Climate policy in Europe" />
+        <div class="chips">
+          <button class="chip" onclick="setTopic('Climate policy in Europe')">Climate policy in Europe</button>
+          <button class="chip" onclick="setTopic('AI regulation in 2025')">AI regulation in 2025</button>
+          <button class="chip" onclick="setTopic('Space exploration news')">Space exploration news</button>
+          <button class="chip" onclick="setTopic('Global economic outlook')">Global economic outlook</button>
+          <button class="chip" onclick="setTopic('Future of renewable energy')">Future of renewable energy</button>
+        </div>
+      </section>
+
+      <div class="rule"></div>
+
+      <button class="run-btn" id="run-btn" onclick="runDemo()">
+        <span id="run-label">Run the Newsroom</span>
+        <svg id="run-spinner" class="spinner hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      </button>
+
+      <div class="status-pill" id="status-pill"></div>
+
+      <div class="rule"></div>
+
+      <section class="explainer">
+        <h3>How it works</h3>
+        <div class="step-list">
+          <div class="step-item">
+            <span class="step-num">1</span>
+            <p>The <strong>Editor</strong> receives your topic, plans the article structure, and delegates tasks.</p>
+          </div>
+          <div class="step-item">
+            <span class="step-num">2</span>
+            <p>The <strong>Researcher</strong> gathers specific facts, statistics, and context for the brief.</p>
+          </div>
+          <div class="step-item">
+            <span class="step-num">3</span>
+            <p>The <strong>Writer</strong> crafts polished prose from the research, guided by the Editor's style note.</p>
+          </div>
+          <div class="step-item">
+            <span class="step-num">4</span>
+            <p>The <strong>Editor</strong> assembles the final briefing and publishes it to the front page.</p>
+          </div>
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- Right column: agent newsroom + output -->
+    <section class="newsroom">
+
+      <div class="agents-grid">
+
+        <div class="agent-card" id="card-editor">
+          <div class="agent-header">
+            <div class="agent-meta">
+              <span class="agent-badge editor-badge">Editor</span>
+              <span class="agent-role-label">Orchestrator</span>
+            </div>
+            <div class="agent-indicator" id="dot-editor"></div>
+          </div>
+          <div class="agent-log" id="log-editor">
+            <div class="log-entry idle">Awaiting topic...</div>
+          </div>
+        </div>
+
+        <div class="agent-card" id="card-researcher">
+          <div class="agent-header">
+            <div class="agent-meta">
+              <span class="agent-badge researcher-badge">Researcher</span>
+              <span class="agent-role-label">Tool user</span>
+            </div>
+            <div class="agent-indicator" id="dot-researcher"></div>
+          </div>
+          <div class="agent-log" id="log-researcher">
+            <div class="log-entry idle">Waiting for assignment...</div>
+          </div>
+        </div>
+
+        <div class="agent-card" id="card-writer">
+          <div class="agent-header">
+            <div class="agent-meta">
+              <span class="agent-badge writer-badge">Writer</span>
+              <span class="agent-role-label">Specialist</span>
+            </div>
+            <div class="agent-indicator" id="dot-writer"></div>
+          </div>
+          <div class="agent-log" id="log-writer">
+            <div class="log-entry idle">Waiting for research...</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Output article -->
+      <article class="output-article hidden" id="output-article">
+        <div class="output-kicker">Breaking — AI-generated briefing</div>
+        <h2 class="output-headline" id="output-headline"></h2>
+        <div class="output-byline">
+          <span>By the AI News Desk</span>
+          <span class="byline-sep">|</span>
+          <span id="output-time"></span>
+        </div>
+        <div class="output-rule"></div>
+        <div class="output-body" id="output-body"></div>
+        <div class="output-footer">
+          <span class="footer-tag">Produced by 3 autonomous agents</span>
+          <span class="footer-tag">Powered by MiniMax M1 via OpenRouter</span>
+        </div>
+      </article>
+
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>An educational demo of autonomous AI agents. Not real journalism. Built with <a href="https://openrouter.ai" target="_blank">OpenRouter</a> + MiniMax M1.</p>
+  </footer>
+
+  <script src="agents.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
