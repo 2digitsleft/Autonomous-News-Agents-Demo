@@ -4,6 +4,8 @@ A browser-based demo that shows non-technical audiences what autonomous AI agent
 and how they collaborate. Three specialized agents work together to produce a live news
 briefing from any topic you provide.
 
+<img src="demo-screen.png" alt="Alt text" width="700">
+
 ## What it demonstrates
 
 | Concept | How it's shown |
@@ -13,8 +15,6 @@ briefing from any topic you provide.
 | Agent-to-agent communication | Output from each agent is passed as structured input to the next |
 | Orchestration | The Editor plans the task, delegates, and assembles the final output |
 | Autonomous multi-step planning | The system runs from topic → published article without human steps |
-
-<img src="demo-screen.png" alt="Alt text" width="800">
 
 ## The three agents
 
